@@ -20,6 +20,7 @@ def get_app_in_rotation():
             ready = True
             
 
+@app.route('/')
 @app.route('/health')
 def hello():
     return "Hello World!"

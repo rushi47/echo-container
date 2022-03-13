@@ -3,6 +3,7 @@ import subprocess
 import time
 import os
 import threading
+import socket
 app = Flask(__name__)
 
 ready = True
@@ -23,7 +24,7 @@ def get_app_in_rotation():
 @app.route('/')
 @app.route('/health')
 def hello():
-    return "Hello World!"
+    return f"Hello World! : {socket.gethostname()}"
 
 @app.route('/getip')
 def hello_name():

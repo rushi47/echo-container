@@ -42,7 +42,13 @@ docker run -p 8080:8080 -e SLEEP_TIME=100 --name echo_svc echo_containe
 
 ## Run
 
-Container can be built using 
+You can pull the docker container from docker hub using :
+
+```bash
+docker pull rushib47/echo-container
+```
+
+OR Container can be built using 
 
 ```bash
   docker built -t echo_container .

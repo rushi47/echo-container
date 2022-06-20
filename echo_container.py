@@ -11,9 +11,9 @@ ready = True
 
 def get_app_in_rotation():
     '''
-    Will make readiness probe success after 220 seconds automatically
+    Will make readiness probe success after 220 seconds automatically if not SLEEP TIME
     '''
-    time_sleep = os.getenv('SLEEP_TIME', 220)
+    time_sleep = os.getenv('ECHO_SLEEP_TIME', 220)
     global ready
     while True:
         if not ready:
@@ -23,39 +23,31 @@ def get_app_in_rotation():
 
 @app.route('/')
 @app.route('/health')
+@app.route('/lprobe')
+@app.route('/liveness_probe')
 def hello():
-    return f"Hello World! : {socket.gethostname()}"
+    global ready
+    
+    if ready:
+        return f"Hello World! : {socket.gethostname()}", 200
 
+    return f"Failing Health as set in maintainance : {ready}", 503
+
+@app.route('/ip')    
 @app.route('/getip')
 def hello_name():
     status, output = subprocess.getstatusoutput('hostname -I')
-    return output
+    return output, 200
 
-@app.route('/process_wg', methods=['POST'])
-def get_wg():
-    print('Work group received')
-    return 200
-
-@app.route('/create_index')
-def refresh_index():
-    '''
-    Index will be loaded for specific wg
-    '''
-    domain_name = None
-    try:
-        domain_name = request.args['domain_name']
-    except Exception as e:
-        return 'Require domain name to load index', 400
-
-    return f'Index being loaded for wg: {domain_name}.', 200
-
+@app.route('/rprobe')
 @app.route('/rediness_probe')
 def rediness_probe():
     if ready:
         return 'ok', 200
     else:
-        return f'Ready: {ready}', 503
+        return f'readiness probe failing : {ready}', 503
 
+@app.route('/setm')
 @app.route('/set_maintenance')
 def set_maintenance():
     '''
@@ -66,6 +58,7 @@ def set_maintenance():
 
     return f'Readiness Probe, will fail, ready_value: {ready}', 200
 
+@app.route('/remom')
 @app.route('/remove_maintenance')
 def remove_maintenance():
     '''
@@ -80,4 +73,4 @@ if __name__ == '__main__':
     readiness_app = threading.Thread(target=get_app_in_rotation)
     readiness_app.start()
 
-    app.run('0.0.0.0', port=4747, debug=True)
+    app.run('0.0.0.0', port=os.getenv('ECHO_PORT', 8080), debug=os.getenv('ECHO_DEBUG', True))

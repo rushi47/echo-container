@@ -9,6 +9,7 @@ probe while writing helm charts.
 With the same idea i build out this service. Below are the API References, to quickly get
 started with your development.
 
+> Brownie ;) Wanna test it in k8s and bored of writing helm chart ? Head over to below repo and get the helm chart for this container. https://github.com/rushi47/echo-container-chart 
 
 ## In Action
 

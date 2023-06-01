@@ -69,6 +69,14 @@ def remove_maintenance():
 
     return f'Readiness Probe, will succeed, ready_value: {ready}', 200
 
+@app.route('/cluster_name')
+def refresh_index():
+    '''
+        - Set cluster name environment varibale and make it retrieve it
+    '''
+    env_variable = os.getenv('CLUSTER_NAME', "no_cluster_specified")
+    return f'Hello from: {env_variable}.', 200    
+
 if __name__ == '__main__':
     readiness_app = threading.Thread(target=get_app_in_rotation)
     readiness_app.start()

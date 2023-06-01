@@ -69,12 +69,12 @@ def remove_maintenance():
 
     return f'Readiness Probe, will succeed, ready_value: {ready}', 200
 
-@app.route('/cluster_name')
+@app.route('/echo')
 def refresh_index():
     '''
-        - Set cluster name environment varibale and make it retrieve it
+    Echo string passed inside environment variable
     '''
-    env_variable = os.getenv('CLUSTER_NAME', "no_cluster_specified")
+    env_variable = os.getenv('ECHO_RESPONSE', "default_echo")
     return f'Hello from: {env_variable}.', 200    
 
 if __name__ == '__main__':
